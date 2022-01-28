@@ -1,16 +1,18 @@
 import React from 'react'
-import { useSelector, useDispatch } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { newAnecdote } from '../reducers/anecdoteReducer'
+import { customizedNotification } from '../reducers/notificationReducer'
 
 const AnecdoteForm = () => {
-    const anecdotes = useSelector(state => state)
     const dispatch = useDispatch()
 
     const createNewAnecdote = (event) => {
         event.preventDefault()
         const anecdoteData = event.target.anecdote.value
-        event.target.anecdote.value = ''
         dispatch(newAnecdote(anecdoteData))
+        dispatch(customizedNotification(`You added a new anecdote: '${anecdoteData}'`))
+        setTimeout(() => dispatch(customizedNotification(null)), 5000)
+        event.target.anecdote.value = ''
     }
 
     return (
