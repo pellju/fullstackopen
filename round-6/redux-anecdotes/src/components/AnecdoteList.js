@@ -6,7 +6,6 @@ import { customizedNotification } from '../reducers/notificationReducer'
 const AnecdoteList = () => {
     const anecdotes = useSelector(state => state.anecdotes)
     const filter = useSelector(state => state.filterValue)
-    
     const filteredAnecdotes = anecdotes.filter(a => a.content.includes(filter.value))
     //console.log(filteredAnecdotes)
     const dispatch = useDispatch()
