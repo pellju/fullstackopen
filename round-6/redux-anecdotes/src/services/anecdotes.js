@@ -16,7 +16,7 @@ const createAnecdote = async (anecdote) => {
 const increaseVote = async (anecdoteID) => {
     const listOfAnecdotes = await getAll()
     const anecdote = listOfAnecdotes.find(a => a.id === anecdoteID)
-    console.log(anecdote)
+
     if (anecdote === null || anecdote === undefined) {
         console.log("not found")
     } else {

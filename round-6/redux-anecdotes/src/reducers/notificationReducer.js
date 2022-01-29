@@ -9,12 +9,15 @@ export const clearNotification = () => {
     }
 }
 
-export const customizedNotification = (newNotification) => {
+export const customizedNotification = (newNotification, time) => {
     return dispatch => {
         dispatch({
             type: 'NEW_NOTIFICATION',
-            notification: newNotification
+            notification: newNotification,
         })
+        setTimeout(() => {
+            dispatch(clearNotification())
+        }, time)
     } 
     
     /*return {
@@ -28,7 +31,6 @@ export const customizedNotification = (newNotification) => {
 const changeNotification = (state = [], action) => {
     switch (action.type) {
         case 'NEW_NOTIFICATION':
-            //console.log("new-notification:" + action.notification)
             return action
         case 'CLEAR_NOTIFICATION':
             return action
