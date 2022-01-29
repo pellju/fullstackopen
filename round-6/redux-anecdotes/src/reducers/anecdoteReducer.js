@@ -16,7 +16,7 @@ export const increaseVotes = (id) => {
 }
 
 export const newAnecdote = (anecdote) => {
-  return async dispatch => {
+  return dispatch => {
     //const newAnecdote = await anecdoteService.createAnecdote(anecdote)
     dispatch({
       type: 'NEW_ANECDOTE',
