@@ -1,5 +1,7 @@
 import React from 'react'
 
+let timeoutValue = null
+
 export const clearNotification = () => {
     return dispatch => {
         dispatch({
@@ -15,18 +17,16 @@ export const customizedNotification = (newNotification, time) => {
             type: 'NEW_NOTIFICATION',
             notification: newNotification,
         })
-        setTimeout(() => {
+
+        if (timeoutValue !== null) {
+            clearTimeout(timeoutValue)
+        }
+
+        timeoutValue = setTimeout(() => {
             dispatch(clearNotification())
         }, time)
     } 
-    
-    /*return {
-        type: 'NEW_NOTIFICATION',
-        notification: newNotification
-    }*/
 }
-
-//const firstNotification = customizedNotification(null)
 
 const changeNotification = (state = [], action) => {
     switch (action.type) {
