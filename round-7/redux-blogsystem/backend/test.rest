@@ -1,0 +1,12 @@
+POST http://localhost:3003/api/blogs
+Content-Type: application/json; charset=utf-8
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InBlbmEiLCJpZCI6IjYxZGY1OGMzYjQwMDNjZTYzMDQ0NWVjZSIsImlhdCI6MTY0MjYzNDA5NCwiZXhwIjoxNjQyNjM3Njk0fQ.wbn42eoLFCcawDvvvk_BWQMyLo6scxx0IVCQ7oRUcCI
+
+{
+    "title" : "TestiOtsikko",
+    "author": "Mie Vaan",
+    "url": "https://duckduckgo.com",
+    "likes": 8,
+    "username": "pena",
+    "password": "123456"
+}
