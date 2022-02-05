@@ -6,6 +6,18 @@ import LoginForm from './components/Login'
 import AddingBlogForm from './components/AddBlog'
 import PropTypes from 'prop-types'
 
+//import ReactDOM from 'react-dom'
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  //Link,
+  //Redirect,
+  //useRouteMatch,
+  //useHistory
+} from 'react-router-dom'
+import userService from './services/users'
+
 const Togglable = React.forwardRef((props, ref) => {
   const [visible, setVisible] = useState(false)
 
@@ -87,6 +99,58 @@ const increaseLike = async (blog, setBlogs) => {
   } catch (e) {
     console.log(e)
   }
+}
+
+const RouteData = ({errorMessage, successMessage, setSuccessMessage, setErrorMessage, user, loginForm, handleLogout, blogs, setBlogs, setAuthor, author, setUrl, url, setTitle, title}) => {
+  return (
+    <Router>
+        
+        <Switch>
+            <Route path="/users/:id">
+                not yet...
+            </Route>
+            <Route path="/users">
+                <UserList />
+            </Route>
+            <Route path="/">
+                <BlogList errorMessage={errorMessage} successMessage={successMessage} setSuccessMessage={setSuccessMessage} setErrorMessage={setErrorMessage} user={user} loginForm={loginForm} handleLogout={handleLogout} blogs={blogs} setBlogs={setBlogs} setAuthor={setAuthor} author={author} setUrl={setUrl} url={url} setTitle={setTitle} title={title}/>
+            </Route>
+        </Switch>
+    </Router>
+  )
+}
+
+const BlogList = ({errorMessage, successMessage, setSuccessMessage, setErrorMessage, user, loginForm, handleLogout, blogs, setBlogs, setAuthor, author, setUrl, url, setTitle, title}) => {
+  return (
+    <div>
+      <Error message={errorMessage} />
+      <Success message={successMessage} />
+      <h2>Blogs:</h2>
+      {user === null && loginForm()}
+      {user !== null && BlogForm({ user, handleLogout, setSuccessMessage, setErrorMessage, blogs, setBlogs, setAuthor, author, setUrl, url, setTitle, title })}
+    </div>
+  )
+}
+
+const UserList = () => {
+  const [userList, setUserList] = useState([])
+
+  useEffect(() => {
+      userService.getUsers().then(users => {
+          setUserList(users)
+      })
+  }, [])
+
+  return (
+      <div>
+          <h2>Users and their amount of blogs:</h2>
+          {userList.map(user =>
+            <div key={user.name}>
+              <div><b>{user.name}</b> - {user.blogs.length}</div>
+            </div>
+          )}
+      </div>
+  )
 }
 
 
@@ -188,11 +252,7 @@ const App = () => {
 
   return (
     <div>
-      <h2>Blogs:</h2>
-      <Error message={errorMessage} />
-      <Success message={successMessage} />
-      {user === null && loginForm()}
-      {user !== null && BlogForm({ user, handleLogout, setSuccessMessage, setErrorMessage, blogs, setBlogs, setAuthor, author, setUrl, url, setTitle, title })}
+      <RouteData errorMessage={errorMessage} successMessage={successMessage} setSuccessMessage={setSuccessMessage} setErrorMessage={setErrorMessage} user={user} loginForm={loginForm} handleLogout={handleLogout} blogs={blogs} setBlogs={setBlogs} setAuthor={setAuthor} author={author} setUrl={setUrl} url={url} setTitle={setTitle} title={title}/>
     </div>
   )
 }
