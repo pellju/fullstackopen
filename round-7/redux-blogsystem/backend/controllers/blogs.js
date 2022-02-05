@@ -6,9 +6,24 @@ const router = require('express').Router()
 const logger = require('../utils/logger')
 const User = require('../models/user')
 const jwt = require('jsonwebtoken')
+const Comment = require('../models/comments')
 
 router.get('/', (req, res) => {
   res.send('Well, the bottomline is this: Everything is conscious.')
+})
+
+router.get('/blogs/:id/comments', async (request, response) => {
+  const id = request.params.id
+  const blogs = await Blog.find({})
+  const wantedBlog = blogs.find(blog => blog.id === id)
+  if (wantedBlog === undefined) {
+    return response.status(400).send({error: "Blog not found"})
+  } else {
+    const allComments = await Comment.find({})
+    const blogComments = allComments.filter(comment => comment.blogId === id)
+    return response.json(blogComments)
+  }
+
 })
 
 router.get('/blogs', (request, response) => {
@@ -88,6 +103,27 @@ router.delete('/blogs/:id', async(request, response) => {
   }
 })
 
+router.post('/blogs/:id/comments', async(request, response) => {
+  const id = request.params.id
+  const body = request.body
+  console.log(body)
+
+  const blogs = await Blog.find({})
+  const wantedBlog = blogs.find(blog => blog.id === id)
+  
+  if (wantedBlog === undefined) {
+    return response.status(400).send({ error: "Blog not found" })
+  } else {
+    const comment = new Comment({
+      blogId: id,
+      comment: body.comment
+    })
+    
+    const savedComment = await comment.save()
+    response.status(201).json(savedComment.toJSON())
+  }
+})
+
 router.put('/blogs/:id', async(request, response) => {
   const id = request.params.id
   const body = request.body
@@ -97,7 +133,7 @@ router.put('/blogs/:id', async(request, response) => {
   const wantedBlog = blogs.find(blog => blog.id === id)
 
   if (wantedBlog == undefined) {
-    return response.status(400).send({ error: "ID not found"})
+    return response.status(400).send({ error: "ID not found" })
   } else {
     const user = await User.findById(wantedBlog.users[0])
     const updatedBlog = {

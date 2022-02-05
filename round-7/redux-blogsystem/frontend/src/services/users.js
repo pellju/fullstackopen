@@ -6,4 +6,5 @@ const getUsers = () => {
   return request.then(response => response.data)
 }
 
-export default { getUsers }
+const exportedObject = { getUsers }
+export default exportedObject

@@ -40,4 +40,17 @@ const removeBlog = async (id) => {
   return response.data
 }
 
-export default { getAll, setToken, addBlog, addLike, removeBlog }
+const getComments = async (id) => {
+  const commentUrl = `http://localhost:3003/api/blogs/${id}/comments`
+  const request = axios.get(commentUrl)
+  return request.then(comments => comments.data)
+}
+
+const addComment = async (id, newComment) => {
+  const commentUrl = `http://localhost:3003/api/blogs/${id}/comments`
+  const response = axios.post(commentUrl, newComment)
+  return response.then(comments => comments)
+}
+
+const exportedObject = {getAll, setToken, addBlog, addLike, removeBlog, getComments, addComment}
+export default exportedObject
