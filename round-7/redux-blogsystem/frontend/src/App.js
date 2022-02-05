@@ -11,12 +11,14 @@ import {
   BrowserRouter as Router,
   Switch,
   Route,
-  //Link,
+  Link,
   //Redirect,
   //useRouteMatch,
   //useHistory
 } from 'react-router-dom'
 import userService from './services/users'
+import User from './components/User'
+import BlogInfo from './components/BlogInfo'
 
 const Togglable = React.forwardRef((props, ref) => {
   const [visible, setVisible] = useState(false)
@@ -89,28 +91,28 @@ const removeBlog = async (blog, setBlogs) => {
 }
 
 const increaseLike = async (blog, setBlogs) => {
-  //console.log(blog)
-  //event.preventDefault()
 
   try {
     const response = await blogService.addLike(blog.title, blog.author, blog.url, blog.likes + 1, blog.id).then()
-    //const newBlogs = await blogService.getAll()
     setBlogs(response)
   } catch (e) {
     console.log(e)
   }
 }
 
-const RouteData = ({errorMessage, successMessage, setSuccessMessage, setErrorMessage, user, loginForm, handleLogout, blogs, setBlogs, setAuthor, author, setUrl, url, setTitle, title}) => {
+const RouteData = ({errorMessage, successMessage, setSuccessMessage, setErrorMessage, user, loginForm, handleLogout, blogs, setBlogs, setAuthor, author, setUrl, url, setTitle, title, users}) => {
   return (
     <Router>
         
         <Switch>
             <Route path="/users/:id">
-                not yet...
+                <User users={users}/>
             </Route>
             <Route path="/users">
-                <UserList />
+                <UserList users={users}/>
+            </Route>
+            <Route path="/blogs/:id">
+                <BlogInfo blogs={blogs} />
             </Route>
             <Route path="/">
                 <BlogList errorMessage={errorMessage} successMessage={successMessage} setSuccessMessage={setSuccessMessage} setErrorMessage={setErrorMessage} user={user} loginForm={loginForm} handleLogout={handleLogout} blogs={blogs} setBlogs={setBlogs} setAuthor={setAuthor} author={author} setUrl={setUrl} url={url} setTitle={setTitle} title={title}/>
@@ -132,21 +134,13 @@ const BlogList = ({errorMessage, successMessage, setSuccessMessage, setErrorMess
   )
 }
 
-const UserList = () => {
-  const [userList, setUserList] = useState([])
-
-  useEffect(() => {
-      userService.getUsers().then(users => {
-          setUserList(users)
-      })
-  }, [])
-
+const UserList = ({ users }) => {
   return (
       <div>
           <h2>Users and their amount of blogs:</h2>
-          {userList.map(user =>
+          {users.map(user =>
             <div key={user.name}>
-              <div><b>{user.name}</b> - {user.blogs.length}</div>
+              <div><b><Link to={`/users/${user.id}`}>{user.name}</Link></b> - {user.blogs.length}</div>
             </div>
           )}
       </div>
@@ -168,7 +162,6 @@ const BlogForm = ({ user, handleLogout, setSuccessMessage, setErrorMessage, blog
   }
 
 
-  //console.log(user)
   return (
     <div>
       User {user.name} has logged in. <form onSubmit={handleLogout}><button type='submit'>Logout</button></form>
@@ -198,6 +191,7 @@ const App = () => {
   const [url, setUrl] = useState('')
 
   const [loginShown, setLoginShown] = useState(false)
+  const [users, setUsers] = useState([])
 
   const handleLogin = async (event) => {
     event.preventDefault()
@@ -213,23 +207,18 @@ const App = () => {
       setSuccessMessage(`User ${user.name} successfully logged in.`)
       setTimeout(() => setSuccessMessage(null), 5000)
     } catch (e) {
-      //console.log('Error: ', e) //Errormessagesystem?
-      //console.log(e)
       setErrorMessage('Error: wrong username or password!')
-      //console.log(errorMessage)
       setTimeout(() => setErrorMessage(null), 5000)
     }
   }
 
   const handleLogout = () => {
-    //event.preventDefault()
     window.localStorage.removeItem('userIdentification')
   }
 
   useEffect(() => {
     blogService.getAll().then(blogs => {
       setBlogs( blogs )
-      //console.log(blogs)
     })
   }, [])
 
@@ -242,6 +231,12 @@ const App = () => {
     }
   }, [])
 
+  useEffect(() => {
+    userService.getUsers().then(usersFromBackend => {
+      setUsers(usersFromBackend)
+    })
+  }, [])
+
   const loginForm = () => {
     return (
       <Togglable buttonLabel='Login'>
@@ -252,7 +247,7 @@ const App = () => {
 
   return (
     <div>
-      <RouteData errorMessage={errorMessage} successMessage={successMessage} setSuccessMessage={setSuccessMessage} setErrorMessage={setErrorMessage} user={user} loginForm={loginForm} handleLogout={handleLogout} blogs={blogs} setBlogs={setBlogs} setAuthor={setAuthor} author={author} setUrl={setUrl} url={url} setTitle={setTitle} title={title}/>
+      <RouteData errorMessage={errorMessage} successMessage={successMessage} setSuccessMessage={setSuccessMessage} setErrorMessage={setErrorMessage} user={user} loginForm={loginForm} handleLogout={handleLogout} blogs={blogs} setBlogs={setBlogs} setAuthor={setAuthor} author={author} setUrl={setUrl} url={url} setTitle={setTitle} title={title} users={users}/>
     </div>
   )
 }
