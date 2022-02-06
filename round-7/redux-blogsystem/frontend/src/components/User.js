@@ -9,12 +9,12 @@ const User = ({ users }) => {
     }
 
     return (
-        <div>
+        <div className="userInfo">
             <h1>User <i>{wantedUser.name}</i></h1>
             <p>- has added following blogs:</p>
             <ul>
                 {wantedUser.blogs.map(blog => 
-                    <li><b>{blog.title}</b></li>
+                    <li key={blog.title}><b>{blog.title}</b></li>
                 )}
             </ul>
         </div>

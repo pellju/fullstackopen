@@ -36,7 +36,7 @@ const BlogInfo = ({ blogs }) => {
     }
 
     return (
-        <div>
+        <div className="blogInfo">
             <h1>Blog <i>{wantedBlog.title}</i> by {wantedBlog.author}</h1>
             <p>Url: <Link to={{pathname: wantedBlog.url}}>{wantedBlog.url}</Link></p>
             <p>Likes: {wantedBlog.likes}</p>
