@@ -9,7 +9,7 @@ const Blog = ({ blog }) => {
 
   const listBlogs = () => {
     return (
-      <div>
+      <div className='blogItems'>
         <div style={hideBlog}>
           <Link to={`/blogs/${blog.id}`}>{blog.title}</Link> - {blog.author} <button onClick={() => setShowingBlog(true)}>View blog info</button>
         </div>

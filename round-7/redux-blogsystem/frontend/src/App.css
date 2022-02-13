@@ -6,9 +6,9 @@
     border-radius: 5px;
     padding: 10px;
     margin-bottom: 10px;
-  }
+}
   
-  .error {
+.error {
     color: red;
     background: lightgrey;
     font-size: 20px;
@@ -16,4 +16,39 @@
     border-radius: 5px;
     padding: 10px;
     margin-bottom: 10px;
-  }
+}
+
+.padding {
+  background: rgb(228, 199, 176);
+  font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+  border-style: solid;
+}
+
+.basics {
+  background: snow;
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+
+.userList {
+  background: rgb(231, 229, 229);
+  border-style: ridge;
+}
+
+.blogList {
+  background: fixed, rgb(210, 210, 211);
+  border-style:groove;
+}
+
+.blogItems {
+  background: sandybrown;
+}
+
+.blogInfo {
+  background: aliceblue;
+  border-style:dashed
+}
+
+.userInfo {
+  background: darkgrey;
+  border-style: solid;
+}

@@ -101,9 +101,19 @@ const increaseLike = async (blog, setBlogs) => {
 }
 
 const RouteData = ({errorMessage, successMessage, setSuccessMessage, setErrorMessage, user, loginForm, handleLogout, blogs, setBlogs, setAuthor, author, setUrl, url, setTitle, title, users}) => {
+  const newPadding = {
+    padding: 5
+  }
+  
   return (
     <Router>
-        
+        <div className="padding">
+          <Link style={newPadding} to="/">Blogs</Link>           
+          <Link style={newPadding} to="/users/">Users</Link>
+          {user !== null && 
+            <div>Logged in as <b>{user.name}</b>!<form onSubmit={handleLogout}><button type='submit'>Logout</button></form></div>
+          }
+        </div>
         <Switch>
             <Route path="/users/:id">
                 <User users={users}/>
@@ -124,7 +134,7 @@ const RouteData = ({errorMessage, successMessage, setSuccessMessage, setErrorMes
 
 const BlogList = ({errorMessage, successMessage, setSuccessMessage, setErrorMessage, user, loginForm, handleLogout, blogs, setBlogs, setAuthor, author, setUrl, url, setTitle, title}) => {
   return (
-    <div>
+    <div className='blogList'>
       <Error message={errorMessage} />
       <Success message={successMessage} />
       <h2>Blogs:</h2>
@@ -136,7 +146,7 @@ const BlogList = ({errorMessage, successMessage, setSuccessMessage, setErrorMess
 
 const UserList = ({ users }) => {
   return (
-      <div>
+      <div className='userList'>
           <h2>Users and their amount of blogs:</h2>
           {users.map(user =>
             <div key={user.name}>
@@ -246,7 +256,7 @@ const App = () => {
   }
 
   return (
-    <div>
+    <div className="basics">
       <RouteData errorMessage={errorMessage} successMessage={successMessage} setSuccessMessage={setSuccessMessage} setErrorMessage={setErrorMessage} user={user} loginForm={loginForm} handleLogout={handleLogout} blogs={blogs} setBlogs={setBlogs} setAuthor={setAuthor} author={author} setUrl={setUrl} url={url} setTitle={setTitle} title={title} users={users}/>
     </div>
   )
