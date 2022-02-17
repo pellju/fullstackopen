@@ -1,6 +1,7 @@
 import { Patients } from "../src/types";
+import createNewEntryWithoutId from "../src/utils";
 
-const patientEntries: Array<Patients> = [
+const data = [
   {
       "id": "d2773336-f723-11e9-8f0b-362b9e155667",
       "name": "John McClane",
@@ -42,5 +43,11 @@ const patientEntries: Array<Patients> = [
       "occupation": "Digital evangelist"
   }
 ];
+
+const patientEntries: Array<Patients> = data.map(obj => {
+    const object = createNewEntryWithoutId(obj) as Patients;
+    object.id = obj.id;
+    return object;
+})
 
 export default patientEntries;
