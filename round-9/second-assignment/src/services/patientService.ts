@@ -16,7 +16,7 @@ const getNonSSNPatients = (): NonSSNPatients[] => {
         gender,
         occupation
     }));
-  };
+};
 
 const addEntry = (newPatient: NewPatientWithoutId): Patients => {
   
@@ -28,8 +28,19 @@ const addEntry = (newPatient: NewPatientWithoutId): Patients => {
   return newEntry;
 };
 
+const getPatientData = (id: string) => {
+  const wantedPatient = patientData.find(patient => patient.id === id)
+
+  if (!wantedPatient || wantedPatient === undefined) {
+    throw new Error ('Patient not found!');
+  }
+
+  return wantedPatient;
+} 
+
 export default {
   getEntries,
   addEntry,
-  getNonSSNPatients
+  getNonSSNPatients,
+  getPatientData
 };
