@@ -8,6 +8,7 @@ import { useStateValue } from "./state";
 import { Patient } from "./types";
 
 import PatientListPage from "./PatientListPage";
+import PatientInfo from "./PatientInfo";
 
 const App = () => {
   const [, dispatch] = useStateValue();
@@ -28,22 +29,25 @@ const App = () => {
   }, [dispatch]);
 
   return (
-    <div className="App">
-      <Router>
-        <Container>
-          <Header as="h1">Patientor</Header>
-          <Button as={Link} to="/" primary>
-            Home
-          </Button>
-          <Divider hidden />
-          <Switch>
-            <Route path="/">
-              <PatientListPage />
-            </Route>
-          </Switch>
-        </Container>
-      </Router>
-    </div>
+    <Router>
+      <div className="App">
+          <Container>
+            <Header as="h1">Patientor</Header>
+            <Button as={Link} to="/" primary>
+              Home
+            </Button>
+            <Divider hidden />
+            <Switch>
+              <Route path="/patients/:id" component={<PatientInfo />}>
+                <PatientInfo />
+              </Route>
+              <Route path="/" component={<PatientListPage />}>
+                <PatientListPage />
+              </Route>
+            </Switch>
+          </Container>
+      </div>
+    </Router>
   );
 };
 
