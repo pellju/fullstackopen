@@ -9,12 +9,13 @@ const getEntries = (): Array<Patients> => {
 };
 
 const getNonSSNPatients = (): NonSSNPatients[] => {
-    return patientData.map(({id, name, dateOfBirth, gender, occupation}) => ({
+    return patientData.map(({id, name, dateOfBirth, gender, occupation, entries}) => ({
         id,
         name,
         dateOfBirth,
         gender,
-        occupation
+        occupation,
+        entries
     }));
 };
 
@@ -23,20 +24,20 @@ const addEntry = (newPatient: NewPatientWithoutId): Patients => {
   const newEntry: Patients = {
     id: uuid(),
     ...newPatient
-  } 
-  patientEntries.push(newEntry)
+  };
+  patientEntries.push(newEntry);
   return newEntry;
 };
 
 const getPatientData = (id: string) => {
-  const wantedPatient = patientData.find(patient => patient.id === id)
+  const wantedPatient = patientData.find(patient => patient.id === id);
 
   if (!wantedPatient || wantedPatient === undefined) {
     throw new Error ('Patient not found!');
   }
 
   return wantedPatient;
-} 
+};
 
 export default {
   getEntries,

@@ -1,14 +1,19 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { State } from "./state";
-import { Patient } from "../types";
+import { Diagnosis, Patients } from "../types";
 
 export type Action =
   | {
       type: "SET_PATIENT_LIST";
-      payload: Patient[];
+      payload: Patients[];
     }
   | {
+      type: "ADD_DIAGNOSIS";
+      payload: Diagnosis[];
+    }
+  |{
       type: "ADD_PATIENT";
-      payload: Patient;
+      payload: Patients;
     };
 
 export const reducer = (state: State, action: Action): State => {
@@ -30,6 +35,15 @@ export const reducer = (state: State, action: Action): State => {
         patients: {
           ...state.patients,
           [action.payload.id]: action.payload
+        }
+      };
+    case "ADD_DIAGNOSIS":
+      return {
+        ...state,
+        diagnosis: {
+          ...action.payload.reduce(
+            (code, name) => ({ ...code, [name.code]: name})
+          )
         }
       };
     default:
