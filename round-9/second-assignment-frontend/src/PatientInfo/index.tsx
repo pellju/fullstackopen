@@ -4,7 +4,7 @@ import { useParams } from "react-router-dom";
 import { useStateValue } from "../state";
 import { Diagnosis, Patients } from "../types";
 import { State } from "../state";
-
+import EntryDetails from "../components/entryData";
 
 import 'semantic-ui-css/semantic.min.css';  
 
@@ -36,7 +36,7 @@ const PatientInfo = () => {
             }
         }
 
-        return (
+        /*return (
             <div>
                 <h1>{wantedPatient.name}</h1>
                 <p>Gender: {wantedPatient.gender}</p>
@@ -52,6 +52,18 @@ const PatientInfo = () => {
                             )}
                         </ul>
                     </div>  
+                )}
+            </div>
+        );*/
+        return (
+            <div>
+                <h1>{wantedPatient.name}</h1>
+                <p>Gender: {wantedPatient.gender}</p>
+                <p>Birthday: {wantedPatient.dateOfBirth}</p>
+                <p>Occupation: {wantedPatient.occupation}</p>
+                <h3>Entries:</h3>
+                {wantedPatient.entries.map(entry =>
+                    EntryDetails(entry,diagnosis)
                 )}
             </div>
         );
