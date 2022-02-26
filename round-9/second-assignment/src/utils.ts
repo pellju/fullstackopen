@@ -55,7 +55,8 @@ const isDiagnosisCode = (param: any): param is DiagnosisCodes => {
 };
 
 const parseDiagnosisCodes = (codes: unknown): DiagnosisCodes[] => {
-    return typeof codes === 'Array' || codes instanceof Array;
+    console.log(typeof codes);
+    return typeof codes === 'DiagnosisCodes[]' || codes instanceof DiagnosisCodes[];
 };
 
 const parseDischarge = (discharge: unknown): Discharge => {
