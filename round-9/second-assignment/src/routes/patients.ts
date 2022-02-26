@@ -1,6 +1,7 @@
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
 import express from 'express';
 import patientService from '../services/patientService';
-import createNewEntryWithoutId from '../utils'
+import createNewEntryWithoutId from '../utils';
 
 const router = express.Router();
 
@@ -16,17 +17,30 @@ router.get('/:id', (req, res) => {
     }
     res.status(400).send(errorMsg);
   }
-})
+});
 
 router.get('/', (_req, res) => {
     res.send(patientService.getNonSSNPatients());
+});
+
+router.post('/:id/entries', (req, res) => {
+  try {
+    console.log(req.body); //ok, toimii
+    res.send("!!");
+  } catch (error: unknown) {
+    let errorMsg = 'Something went wrong. ';
+    if (error instanceof Error) {
+      errorMsg = errorMsg + error.message;
+    }
+    res.status(400).send(errorMsg);
+  }
 });
 
 router.post('/', (req, res) => {
   try {
     const newPatientEntry = createNewEntryWithoutId(req.body);
     const addedEntry = patientService.addEntry(newPatientEntry);
-    res.json(addedEntry)
+    res.json(addedEntry);
   } catch (error: unknown) {
     let errorMsg = 'Something went wrong. ';
     if (error instanceof Error) {

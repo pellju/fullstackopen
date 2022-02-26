@@ -67,3 +67,29 @@ export enum Gender {
     Female = 'female',
     Other = 'other',
 }
+
+export enum Types {
+    Hospital = 'Hospital',
+    OccupationalHealthcare = 'OccupationalHealthcare',
+    HealthCheck = 'HealthCheck',
+}
+
+/*export enum DiagnosisCodes {
+    "M24.2" = "Disorder of ligament",
+    "M51.2" = "Other specified intervertebral disc displacement",
+    "S03.5" = "Sprain and strain of joints and ligaments of other and unspecified parts of head",
+    "J10.1" = "Influenza with other respiratory manifestations, other influenza virus codeentified",
+    "J06.9" = "Acute upper respiratory infection, unspecified",
+    "Z57.1" = "Occupational exposure to radiation",
+    "N30.0" = "Acute cystitis",
+    "H54.7" = "Unspecified visual loss",
+    "J03.0" = "Streptococcal tonsillitis",
+    "L60.1" = "Onycholysis",
+    "Z74.3" = "Need for continuous supervision",
+    "L20" = "Atopic dermatitis",
+    "F43.2" = "Adjustment disorders",
+    "S62.5" = "Fracture of thumb",
+    "H35.29" = "Other proliferative retinopathy",
+    "J12.82" = "Pneumonia due to coronavirus disease"
+}*/
+//Discharge, NewDiagnosisWithOutId

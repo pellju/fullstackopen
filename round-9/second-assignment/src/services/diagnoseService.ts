@@ -1,9 +1,10 @@
-import diagnoses from '../../data/diagnoses';
-import { NonLatinDiagnoses, Diagnoses } from '../types';
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+import diagnosis from '../../data/diagnoses';
+import { NonLatinDiagnoses, Diagnosis } from '../types';
 
-const diagnoseData: Array<Diagnoses> = diagnoses ;
+const diagnoseData: Array<Diagnosis> = diagnosis ;
 
-const getEntries = (): Array<Diagnoses> => {
+const getEntries = (): Array<Diagnosis> => {
   return diagnoseData;
 };
 
