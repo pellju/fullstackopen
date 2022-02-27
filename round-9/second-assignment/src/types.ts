@@ -68,10 +68,19 @@ export enum Gender {
     Other = 'other',
 }
 
+export type NewHospitalEntryWithoutId = Omit<HospitalEntry, 'id'>;
+export type NewOccupationalHealthcareEntryWithoutId = Omit<OccupationalHealthcareEntry, 'id'>;
+export type NewHealthCheckEntryWithoutId = Omit<HealthCheckEntry, 'id'>;
+
 export enum Types {
     Hospital = 'Hospital',
     OccupationalHealthcare = 'OccupationalHealthcare',
     HealthCheck = 'HealthCheck',
+}
+
+export interface Discharge {
+    date: string,
+    criteria: string,
 }
 
 /*export enum DiagnosisCodes {

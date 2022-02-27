@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
-import { NewPatientWithoutId, Gender, Types, DiagnosisCodes, Discharge, NewDiagnosisWithOutId } from "./types";
+import { NewPatientWithoutId, Diagnosis, Gender, Discharge, NewHospitalEntryWithoutId } from "./types";
 
 const isString = (checkedItem: unknown): checkedItem is string => {
     return typeof checkedItem === 'string' || checkedItem instanceof String;
@@ -39,29 +39,44 @@ const parseGender = (gender: unknown): Gender => {
     return gender;
 };
 
-const isType = (param: any): param is Types => {
-    return Object.values(Types).includes(param);
-};
-
-const parseType = (givenType: unknown): Types => {
-    if (!givenType || !isType(givenType)) {
-        throw new Error ('Error caused by the given entry type!');
-    }
-    return givenType;
-};
-
-const isDiagnosisCode = (param: any): param is DiagnosisCodes => {
-    return Object.values(DiagnosisCodes).includes(param);
-};
-
-const parseDiagnosisCodes = (codes: unknown): DiagnosisCodes[] => {
-    console.log(typeof codes);
-    return typeof codes === 'DiagnosisCodes[]' || codes instanceof DiagnosisCodes[];
-};
+const isValidDischarge = (param: unknown): param is Discharge => {
+    return (param as Discharge).date !== undefined && typeof (param as Discharge).date === "string" 
+    && (param as Discharge).criteria !== undefined && typeof (param as Discharge).criteria === "string"
+    && isDate((param as Discharge).date); 
+}
 
 const parseDischarge = (discharge: unknown): Discharge => {
-
+    if (!discharge || !isValidDischarge(discharge)) {
+        throw new Error ('Problems with discharge!');
+    }
+    
+    const newItem: Discharge = {
+        date: (discharge as Discharge).date,
+        criteria: (discharge as Discharge).criteria,
+    }
+    return newItem;
 };
+
+const isValidArray = (param: unknown): param is Array<Diagnosis['code']> => {
+    return (param as Array<Diagnosis['code']>) !== undefined
+  };
+  
+  const parseDiagnosisCodes = (listOfCodes: unknown): Array<Diagnosis['code']> => {
+      if (!listOfCodes || !isValidArray(listOfCodes)) {
+        throw new Error ("Problem with the diagnosisCodes given!");
+      }
+      if ((listOfCodes as Array<Diagnosis['code']>).length === 0) {
+        return [];
+      } else {
+        const newList: Array<Diagnosis['code']> = [];
+        let i = 0;
+        while ((listOfCodes as Array<Diagnosis['code']>)[i] !== undefined) {
+          newList.push((listOfCodes as Array<Diagnosis['code']>)[i]);
+          i++;
+        }
+        return newList;
+      }
+  };
 
 type Fields = { name: unknown, dateOfBirth: unknown, ssn: unknown, gender: unknown, occupation: unknown};
 type DiagnosisFields = { date: unknown, type: unknown, specialist: unknown, diagnosisCodes: unknown, description: unknown, discharge: unknown};
@@ -79,12 +94,12 @@ const createNewEntryWithoutId = ({ name, dateOfBirth, ssn, gender, occupation}: 
     return newEntry;
 };
 
-const addNewHospitalDiagnosisToPatient = ({date, type, specialist, diagnosisCodes, description, discharge}: DiagnosisFields): NewHospitalDiagnosisWithOutId => {
-    const newEntry: NewDiagnosisWithOutId = {
+const addNewHospitalEntryToPatient = ({date, specialist, diagnosisCodes, description, discharge}: DiagnosisFields): NewHospitalEntryWithoutId => {
+    const newEntry: NewHospitalEntryWithoutId = {
         date: parseDate(date),
-        type: parseType(type), //!
+        type: 'Hospital',
         specialist: parseString(specialist),
-        diagnosisCodes: parseDiagnosisCodes(diagnosisCodes), //!
+        diagnosisCodes: parseDiagnosisCodes(diagnosisCodes),
         description: parseString(description),
         discharge: parseDischarge(discharge)
     };
@@ -92,4 +107,4 @@ const addNewHospitalDiagnosisToPatient = ({date, type, specialist, diagnosisCode
     return newEntry;
 };
 
-export default {createNewEntryWithoutId, addNewHospitalDiagnosisToPatient};
+export default {createNewEntryWithoutId, addNewHospitalEntryToPatient};
