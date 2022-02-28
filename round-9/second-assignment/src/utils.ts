@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
-import { NewPatientWithoutId, Diagnosis, Gender, Discharge, HospitalEntry } from "./types";
-import {v1 as uuid} from 'uuid';
+import { NewPatientWithoutId, Diagnosis, Gender, Discharge, Entry, sickLeave, HealthCheckRating } from "./types";
+import {parse, v1 as uuid} from 'uuid';
 
 const isString = (checkedItem: unknown): checkedItem is string => {
     return typeof checkedItem === 'string' || checkedItem instanceof String;
@@ -62,13 +62,10 @@ const isValidArray = (param: unknown): param is Array<Diagnosis['code']> => {
     return (param as Array<Diagnosis['code']>) !== undefined
   };
   
-  const parseDiagnosisCodes = (listOfCodes: unknown): Array<Diagnosis['code']> => {
-      if (!listOfCodes || !isValidArray(listOfCodes)) {
-        throw new Error ("Problem with the diagnosisCodes given!");
-      }
-      if ((listOfCodes as Array<Diagnosis['code']>).length === 0) {
+const parseDiagnosisCodes = (listOfCodes: unknown): Array<Diagnosis['code']> => {
+    if (!listOfCodes || !isValidArray(listOfCodes) || (listOfCodes as Array<Diagnosis['code']>).length === 0) {
         return [];
-      } else {
+    } else {
         const newList: Array<Diagnosis['code']> = [];
         let i = 0;
         while ((listOfCodes as Array<Diagnosis['code']>)[i] !== undefined) {
@@ -76,14 +73,46 @@ const isValidArray = (param: unknown): param is Array<Diagnosis['code']> => {
           i++;
         }
         return newList;
-      }
-  };
+    }
+};
+
+const parseSickLeave = (sickleave: unknown): sickLeave => {
+    if (!sickleave || !parseDate((sickleave as sickLeave).startDate) || !parseDate((sickleave as sickLeave).endDate)) {
+        return {
+            startDate: "-",
+            endDate: "-"
+        }
+    }
+    const checkedSickLeave = {
+        startDate: (sickleave as sickLeave).startDate,
+        endDate: (sickleave as sickLeave).endDate
+    };
+    return checkedSickLeave;
+};
+
+const parseHealthCheckRating = (hcr: unknown): HealthCheckRating => {
+    if (!hcr || !parseString(hcr)) {
+        throw new Error ("Problem with the given health check rating!");
+    }
+
+    switch ((hcr as string)) {
+        case 'Healthy':
+            return 0;
+        case 'LowRisk':
+            return 1;
+        case 'HighRisk':
+            return 2;
+        case 'CriticalRisk':
+            return 3;
+        default:
+            throw new Error ("Invalid value with the given health check rating!");
+    }
+};
 
 type Fields = { name: unknown, dateOfBirth: unknown, ssn: unknown, gender: unknown, occupation: unknown};
-type HospitalDiagnosisFields = { date: unknown, specialist: unknown, diagnosisCodes: unknown, description: unknown, discharge: unknown};
+type DiagnosisFields = { date: unknown, type: unknown, specialist: unknown, diagnosisCodes: unknown, description: unknown, discharge: unknown, employerName: unknown, sickLeave: unknown, healthCheckRating: unknown};
 
 export const createNewPatientWithoutId = ({ name, dateOfBirth, ssn, gender, occupation}: Fields): NewPatientWithoutId => {
-//const createNewPatientWithoutId = (object: Fields): NewPatientWithoutId => {
     const newEntry: NewPatientWithoutId = {
         name: parseString(name),
         dateOfBirth: parseDate(dateOfBirth),
@@ -92,22 +121,47 @@ export const createNewPatientWithoutId = ({ name, dateOfBirth, ssn, gender, occu
         occupation: parseString(occupation),
         entries: []
     };
-
     return newEntry;
 };
 
-export const addNewHospitalEntryToPatient = ({date, specialist, diagnosisCodes, description, discharge}: HospitalDiagnosisFields): HospitalEntry => {
-    const newEntry: HospitalEntry = {
-        id: uuid(),
-        date: parseDate(date),
-        type: 'Hospital',
-        specialist: parseString(specialist),
-        diagnosisCodes: parseDiagnosisCodes(diagnosisCodes),
-        description: parseString(description),
-        discharge: parseDischarge(discharge)
-    };
-
-    return newEntry;
+export const addNewEntryToPatient = ({date, type, specialist, diagnosisCodes, description, discharge, employerName, sickLeave, healthCheckRating}: DiagnosisFields): Entry => {
+    if (!parseString(type)) {
+        throw new Error ('Not sure about the type?');
+    }
+    
+    switch (type) {
+        case 'Hospital':
+            return {
+                id: uuid(),
+                date: parseDate(date),
+                type: 'Hospital',
+                specialist: parseString(specialist),
+                diagnosisCodes: parseDiagnosisCodes(diagnosisCodes),
+                description: parseString(description),
+                discharge: parseDischarge(discharge)
+            }
+        case 'OccupationalHealthcare':
+            return {
+                id: uuid(),
+                date: parseDate(date),
+                type: 'OccupationalHealthcare',
+                specialist: parseString(specialist),
+                diagnosisCodes: parseDiagnosisCodes(diagnosisCodes),
+                description: parseString(description),
+                employerName: parseString(employerName),
+                sickLeave: parseSickLeave(sickLeave)
+            }
+        case 'HealthCheck':
+            return {
+                id: uuid(),
+                date: parseDate(date),
+                type: 'HealthCheck',
+                specialist: parseString(specialist),
+                diagnosisCodes: parseDiagnosisCodes(diagnosisCodes),
+                description: parseString(description),
+                healthCheckRating: parseHealthCheckRating(healthCheckRating)
+            }
+        default:
+            throw new Error ('Unknown type.');
+    }
 };
-
-//export default createNewPatientWithoutId;

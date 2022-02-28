@@ -83,6 +83,10 @@ export interface Discharge {
     criteria: string,
 }
 
+export interface sickLeave {
+    startDate: string;
+    endDate: string;
+}
 /*export enum DiagnosisCodes {
     "M24.2" = "Disorder of ligament",
     "M51.2" = "Other specified intervertebral disc displacement",
