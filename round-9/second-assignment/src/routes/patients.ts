@@ -2,7 +2,7 @@
 import express from 'express';
 import patientService from '../services/patientService';
 import { NewPatientWithoutId, Patients } from '../types';
-import {createNewPatientWithoutId, } from '../utils';
+import {createNewPatientWithoutId, addNewEntryToPatient} from '../utils';
 
 const router = express.Router();
 
@@ -27,9 +27,14 @@ router.get('/', (_req, res) => {
 router.post('/:id/entries', (req, res) => {
   try {
     const id = req.params.id;
-    //tarkista että potilas löytyy tältä ID:ltä
-    console.log(req.body); //ok, toimii
-    res.send("!!");
+    const patients = patientService.getNonSSNPatients();
+    let wantedPatient = patients.find(patient => patient.id === id)
+    if (!wantedPatient || wantedPatient === null || wantedPatient === undefined) {
+      console.log("Not found.");
+      throw new Error ('user not found!');
+    }
+    const addedEntry: Patients = patientService.addEntryForPatient((wantedPatient as Patients), addNewEntryToPatient(req.body));
+    res.send(addedEntry);
   } catch (error: unknown) {
     let errorMsg = 'Something went wrong. ';
     if (error instanceof Error) {

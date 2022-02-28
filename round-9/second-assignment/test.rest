@@ -2,13 +2,13 @@ POST http://localhost:3001/api/patients/d2773336-f723-11e9-8f0b-362b9e155667/ent
 Content-Type: application/json; charset=utf-8
 
 {
-    "date": "2015-01-02",
+    "date": "2015-01-25",
     "type": "Hospital",
-    "specialist": "MD House",
-    "diagnosisCodes": ["S62.5"],
-    "description": "Healing time appr. 2 weeks. patient doesn't remember how he got the injury.",
+    "specialist": "puoskari",
+    "diagnosisCodes": [""],
+    "description": "testing testing",
     "discharge": {
-        "date": "2015-01-16",
-        "criteria": "Thumb has healed."
+        "date": "2015-01-25",
+        "criteria": "testings testings."
     }
 }
