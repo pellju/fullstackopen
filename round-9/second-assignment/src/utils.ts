@@ -1,7 +1,8 @@
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
-import { NewPatientWithoutId, Diagnosis, Gender, Discharge, NewHospitalEntryWithoutId } from "./types";
+import { NewPatientWithoutId, Diagnosis, Gender, Discharge, HospitalEntry } from "./types";
+import {v1 as uuid} from 'uuid';
 
 const isString = (checkedItem: unknown): checkedItem is string => {
     return typeof checkedItem === 'string' || checkedItem instanceof String;
@@ -79,9 +80,10 @@ const isValidArray = (param: unknown): param is Array<Diagnosis['code']> => {
   };
 
 type Fields = { name: unknown, dateOfBirth: unknown, ssn: unknown, gender: unknown, occupation: unknown};
-type DiagnosisFields = { date: unknown, type: unknown, specialist: unknown, diagnosisCodes: unknown, description: unknown, discharge: unknown};
+type HospitalDiagnosisFields = { date: unknown, specialist: unknown, diagnosisCodes: unknown, description: unknown, discharge: unknown};
 
-const createNewEntryWithoutId = ({ name, dateOfBirth, ssn, gender, occupation}: Fields): NewPatientWithoutId => {
+export const createNewPatientWithoutId = ({ name, dateOfBirth, ssn, gender, occupation}: Fields): NewPatientWithoutId => {
+//const createNewPatientWithoutId = (object: Fields): NewPatientWithoutId => {
     const newEntry: NewPatientWithoutId = {
         name: parseString(name),
         dateOfBirth: parseDate(dateOfBirth),
@@ -94,8 +96,9 @@ const createNewEntryWithoutId = ({ name, dateOfBirth, ssn, gender, occupation}: 
     return newEntry;
 };
 
-const addNewHospitalEntryToPatient = ({date, specialist, diagnosisCodes, description, discharge}: DiagnosisFields): NewHospitalEntryWithoutId => {
-    const newEntry: NewHospitalEntryWithoutId = {
+export const addNewHospitalEntryToPatient = ({date, specialist, diagnosisCodes, description, discharge}: HospitalDiagnosisFields): HospitalEntry => {
+    const newEntry: HospitalEntry = {
+        id: uuid(),
         date: parseDate(date),
         type: 'Hospital',
         specialist: parseString(specialist),
@@ -107,4 +110,4 @@ const addNewHospitalEntryToPatient = ({date, specialist, diagnosisCodes, descrip
     return newEntry;
 };
 
-export default {createNewEntryWithoutId, addNewHospitalEntryToPatient};
+//export default createNewPatientWithoutId;

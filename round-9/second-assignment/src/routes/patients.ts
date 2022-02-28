@@ -1,7 +1,8 @@
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
 import express from 'express';
 import patientService from '../services/patientService';
-import createNewEntryWithoutId from '../utils';
+import { NewPatientWithoutId, Patients } from '../types';
+import {createNewPatientWithoutId, } from '../utils';
 
 const router = express.Router();
 
@@ -25,6 +26,8 @@ router.get('/', (_req, res) => {
 
 router.post('/:id/entries', (req, res) => {
   try {
+    const id = req.params.id;
+    //tarkista että potilas löytyy tältä ID:ltä
     console.log(req.body); //ok, toimii
     res.send("!!");
   } catch (error: unknown) {
@@ -38,8 +41,8 @@ router.post('/:id/entries', (req, res) => {
 
 router.post('/', (req, res) => {
   try {
-    const newPatientEntry = createNewEntryWithoutId(req.body);
-    const addedEntry = patientService.addEntry(newPatientEntry);
+    const newPatientEntry: NewPatientWithoutId = createNewPatientWithoutId(req.body);
+    const addedEntry: Patients = patientService.addEntry(newPatientEntry);
     res.json(addedEntry);
   } catch (error: unknown) {
     let errorMsg = 'Something went wrong. ';
